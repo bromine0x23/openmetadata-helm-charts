@@ -344,15 +344,6 @@ OpenMetadata Configurations Environment Variables*/}}
 {{ include "OpenMetadata.configs.secretManager.gcp.additionalParameters" . }}
 {{- end }}
 {{- end }}
-{{- if and ( .Values.openmetadata.config.smtpConfig.enableSmtpServer ) ( .Values.openmetadata.config.smtpConfig.password.secretRef )}}
-{{- with .Values.openmetadata.config.smtpConfig.password }}
-- name: SMTP_SERVER_PWD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .secretRef }}
-      key: {{ .secretKey }}
-{{- end }}
-{{- end }}
 {{- end }}
 
 
@@ -375,8 +366,8 @@ Build the OpenMetadata Deploy Pipelines Command using reindexConfig */}}
   - "/bin/bash"
   - "-c"
   {{- if .Values.openmetadata.config.reindexConfig.debug }}
-  - "/opt/openmetadata/bootstrap/openmetadata-ops.sh -d deploy-pipelines {{ default "" .Values.openmetadata.config.reindexConfig.additionalArgs }}"
+  - "/opt/openmetadata/bootstrap/openmetadata-ops.sh -d reindex {{ default "" .Values.openmetadata.config.reindexConfig.additionalArgs }}"
   {{- else }}
-  - "/opt/openmetadata/bootstrap/openmetadata-ops.sh deploy-pipelines {{ default "" .Values.openmetadata.config.reindexConfig.additionalArgs }}"
+  - "/opt/openmetadata/bootstrap/openmetadata-ops.sh reindex {{ default "" .Values.openmetadata.config.reindexConfig.additionalArgs }}"
   {{- end }}
 {{- end }}
